@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+    <body>
+        <div id="mensagens"></div>
+        <form name="formChat" action="">
+            <label for="mensagem">Mensagem</label>
+            <br/>
+            <textarea name="mensagem" id="mesagem" cols="27" rows="10"></textarea>
+            <br/>
+            <button type="button" onclick="enviar()">Entrar</button>
+        </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.js" integrity="sha512-nYuHvSAhY5lFZ4ixSViOwsEKFvlxHMU2NHts1ILuJgOS6ptUmAGt/0i5czIgMOahKZ6JN84YFDA+mCdky7dD8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            const socket = io('http://localhost:3000')
+
+            function enviar(){
+                let nome = document.formChat.nome.value
+                let mensagem = document.formChat.mensagem.value
+
+                socket.emit('enviarMensagem', {
+                    mensagem: mensagem
+                })
+
+            }
+            
+            socket.on('renderizarMensagens', (data) => {
+                console.log(data.autor + ':' + data.mensagem)
+                let div = document.createElement('div')
+                div.innerHTML = data.autor + ':' + data.mensagem
+                document.getElementById('mensagens').appendChild(div)
+            })
+
+        </script>
+    </body>
+</html>
